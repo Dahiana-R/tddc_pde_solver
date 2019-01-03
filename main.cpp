@@ -13,21 +13,29 @@ namespace dauphine {
 		return std::max(x, 100.);
 	}
 
-	void essai() {
-		Grille mesh(1, 200, 250, 201);
+	/*void essai() {
+		//Grille mesh(1, 200, 250, 201);
 		Parameters param(0.2, 0.01, 0.5);
 		Boundaries bound(mesh, param, payoff);
 		std::vector<double> price = dauphine::CrankNicholson(mesh, param, bound, payoff);
-		for (std::size_t i = 0; i <= price.size(); ++i)
+		for (std::size_t i = 0; i < price.size(); ++i)
 		{
 			std::cout << i << " : " << price[i] << std::endl;
 		}
-	}
+	}*/
 
 	void essai2() {
 		Parameters param(0.2, 0.01, 0.5);
+		//Grille mesh(1, 200, 250, 201);
+		Grille mesh(1, 200, 0, (1. / 252.) , 2);
 		std::cout << param.GetRate() << std::endl;
 		std::cout << param.GetVol() << std::endl;
+		std::vector<double> price = mesh.getStockVector();
+		for (std::size_t i = 0; i < price.size(); ++i)
+		{
+			std::cout << i << " : " << price[i] << std::endl;
+		}
+
 	}
 
 }
