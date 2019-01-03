@@ -3,7 +3,7 @@
 
 namespace dauphine
 {
-/*	Grille::Grille(double Time, double StockMax, double TimeNumber, double StockNumber)
+/*	 Grille::Grille(double Time, double StockMax, double TimeNumber, double StockNumber)
 		: Time(Time), StockMax(StockMax), TimeNumber(TimeNumber),StockNumber(StockNumber),dt(((Time - 0) / TimeNumber)),dx(((StockMax - 0) / StockNumber))
 	{
 		std::vector<double> test(StockNumber);
