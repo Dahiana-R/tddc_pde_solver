@@ -9,7 +9,7 @@ namespace dauphine
 	//Plein de variables inutiles, je me suis pris la tête, enlevé Stockmin, Time Number certainement...
 	class Grille {
 	public:
-		Grille(double Time, double StockMax, double TimeNumber, double StockNumber);
+		Grille(double Time, double StockMax, double StockMin, double dt, double dx);
 		std::vector<double> getStockVector() const;
 		std::vector<double> getTimeVector() const;
 		double getdt() const;
@@ -21,11 +21,11 @@ namespace dauphine
 	private:
 		double Time;
 		double StockMax;
-		double TimeNumber;
-		double StockNumber;
+		size_t TimeNumber;
+		size_t StockNumber;
 		double dt;
 		double dx;
-		
+		std::vector<double> StockVector;
 	};
 }
 
