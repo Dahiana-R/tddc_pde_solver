@@ -4,44 +4,56 @@
 
 namespace dauphine
 {
-	double Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		if (isright == false) {
-			return (1. + param.GetTheta()*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx(), 2)) + param.GetRate()));
+	std::vector<double> Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
+			if (isright == false) {
+				test[i] = (1. + param.GetTheta()*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+			}
+			else {
+				test[i] = (1. + (param.GetTheta() - 1.)*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+			}
 		}
-		else {
-			return (1. + (param.GetTheta()-1.)*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx(), 2)) + param.GetRate()));
-		}
+		return test;
 	}
-	double Upper_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		if (isright == false) {
-			return (param.GetTheta()*mesh.getdt()*((-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx(), 2) + 0.25*(pow(param.GetVol(),2) - param.GetRate() / mesh.getdx()))));
+	std::vector<double> Upper_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < test.size(); i++) {
+			if (isright == false) {
+				test[i]= (param.GetTheta()*mesh.getdt()*((-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx()[i]))));
+			}
+			else {
+				test[i] =(param.GetTheta() - 1.)*mesh.getdt()*((-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx()[i])));
+			}
 		}
-		else {
-			return (param.GetTheta()-1.)*mesh.getdt()*((-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx(), 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx())));
-		}
+		return test;
 	}
-	double Lower_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		if (isright == false) {
-			return (param.GetTheta()*mesh.getdt()*(-(0.5*pow(param.GetVol(), 2) / pow(mesh.getdx(), 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx()))));
+	std::vector<double> Lower_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < test.size(); i++) {
+			if (isright == false) {
+				test[i] = (param.GetTheta()*mesh.getdt()*(-(0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx()[i]))));
+			}
+			else {
+				test[i] = (param.GetTheta() - 1.)*mesh.getdt()*(-(0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx()[i])));
+			}
 		}
-		else {
-			return (param.GetTheta()-1.)*mesh.getdt()*(-(0.5*pow(param.GetVol(), 2) / pow(mesh.getdx(), 2) + 0.25*(pow(param.GetVol(), 2) - param.GetRate() / mesh.getdx())));
-		}
+		return test;
 	}
 
 	std::vector<double> CrankNicholson(Grille mesh, Parameters param, Boundaries bound) {
 
 		//paramètre de gauche(avec Theta)
-		double aleft = Lower_diag_coeff(mesh, param,false);
-		double bleft = Mid_diag_coeff(mesh, param,false);
-		double cleft = Upper_diag_coeff(mesh, param,false);
+		std::vector <double> aleft = Lower_diag_coeff(mesh, param,false);
+		std::vector <double> bleft = Mid_diag_coeff(mesh, param,false);
+		std::vector <double> cleft = Upper_diag_coeff(mesh, param,false);
 		//paramètre de droite(donc Theta-1)
-		double aright = Lower_diag_coeff(mesh, param,true);
-		double bright = Mid_diag_coeff(mesh, param, true);
-		double cright = Upper_diag_coeff(mesh, param, true);
+		std::vector <double> aright = Lower_diag_coeff(mesh, param,true);
+		std::vector <double> bright = Mid_diag_coeff(mesh, param, true);
+		std::vector <double> cright = Upper_diag_coeff(mesh, param, true);
 
 		//vecteur contenant tous les coef, on les calcule une fois on est tranquille, penser à changer sur les autres fonctions si je ne l'ai pas fait.
-		std::vector<double>coefficients{ aleft,bleft,cleft,aright,bright,cright };
+		std::vector<std::vector<double>>coefficients{ aleft,bleft,cleft,aright,bright,cright };
 
 		//on va stocker les prix au temps t-1 la dedans
 		//on récupère expiry, mettre la fonction correctement....
@@ -60,21 +72,21 @@ namespace dauphine
 
 	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilisé la première méthode)
 	//OK VALIDE
-	std::vector<double> LinearTriDiagSolver(std::vector<double> d,std::vector<double> coefficients) {
+	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients) {
 		std::vector<double> test(d.size());
-		double a = coefficients[0];
-		double b = coefficients[1];
-		double c = coefficients[2];
+		std::vector<double> a = coefficients[0];
+		std::vector<double> b = coefficients[1];
+		std::vector<double> c = coefficients[2];
 		std::vector<double> tempc(d.size());
 		std::vector<double> tempd(d.size());
 		for (size_t i = 0; i < d.size(); i++) {
 			if (i == 0) {
-				tempc[i] = c / b;
-				tempd[i] = d[i] / b;
+				tempc[i] = c[i] / b[i];
+				tempd[i] = d[i] / b[i];
 			}
 			else {
-				tempc[i] = c / (b - a * tempc[i - 1]);
-				tempd[i] = (d[i] - a * tempd[i - 1]) / (b - a * tempc[i - 1]);
+				tempc[i] = c[i] / (b[i] - a[i] * tempc[i - 1]);
+				tempd[i] = (d[i] - a[i] * tempd[i - 1]) / (b[i] - a[i] * tempc[i - 1]);
 			}
 
 		}
@@ -90,23 +102,23 @@ namespace dauphine
 	}
 
 	//la fonction tourne, le fait que ca renvoie ou non le bon résultat est sujet à débat	.
-	std::vector<double> rightvector(Grille mesh, Parameters param, std::vector<double> f_n1, Boundaries bound, std::vector<double> coefficients,size_t time) {
+	std::vector<double> rightvector(Grille mesh, Parameters param, std::vector<double> f_n1, Boundaries bound, std::vector<std::vector<double>> coefficients,size_t time) {
 
 		std::vector<double> test(f_n1.size());
-		double a = coefficients[3];
-		double aleft = coefficients[0];
-		double b = coefficients[4];
-		double c = coefficients[5];
-		double cleft = coefficients[2];
+		std::vector<double> a = coefficients[3];
+		std::vector<double> aleft = coefficients[0];
+		std::vector<double> b = coefficients[4];
+		std::vector<double> c = coefficients[5];
+		std::vector<double> cleft = coefficients[2];
 		for (size_t i = 0; i < f_n1.size(); i++) {
 			if (i == 0) { //le - devant le coef correspond au temps t(quand on passe le vecteur à droite), le reste au temps t+1
-				test[i] = -aleft * bound.getlowercondition()[time+1] + a* bound.getlowercondition()[time] + b * f_n1[i] + c * f_n1[i + 1]  ;
+				test[i] = -aleft[i] * bound.getlowercondition()[time+1] + a[i]* bound.getlowercondition()[time] + b[i] * f_n1[i] + c[i] * f_n1[i + 1]  ;
 			}
 			else if (i == f_n1.size()-1) {
-				test[i] = a * f_n1[i - 1] + b * f_n1[i] + c * bound.getupercondition()[time] - cleft * bound.getupercondition()[time+1];
+				test[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * bound.getupercondition()[time] - cleft[i] * bound.getupercondition()[time+1];
 			}
 			else {
-				test[i] = a * f_n1[i - 1] + b * f_n1[i] + c * f_n1[i + 1];
+				test[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * f_n1[i + 1];
 			}
 			
 		}

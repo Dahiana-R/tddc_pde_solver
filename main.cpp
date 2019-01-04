@@ -15,7 +15,7 @@ namespace dauphine {
 
 	void essai() {
 		Parameters param(0.2, 0., 0.5);
-		Grille mesh(1, 300, 20, (1. / 252.) , 1);
+		Grille mesh(1, 200, 20, (1. / 252.) , 0.5);
 		Boundaries bound(mesh, param, payoff);
 		std::vector<double> price = dauphine::CrankNicholson(mesh, param, bound);
 		std::vector<double> payoff = bound.getpayoff();
@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 	double spot = 100;
 	double strike = 100;
 	double volatility = 0.2;
-	double maturity = 2;
+	double maturity = 1;
 	bool istrue = true;
 
 	std::cout << "BS Price is:"<< dauphine::bs_price(spot, strike, volatility, maturity, istrue) << std::endl;

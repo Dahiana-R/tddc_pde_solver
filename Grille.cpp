@@ -14,16 +14,22 @@ namespace dauphine
 		StockVector = test;
 	}*/
 
-	Grille::Grille(double Time, double StockMax, double StockMin, double dt, double dx)
-		: Time(Time), StockMax(StockMax), TimeNumber(floor((Time-0)/dt) +1), StockNumber(floor((StockMax - StockMin) / dx) + 1), dt(dt), dx(dx)
+	Grille::Grille(double Time, double StockMax, double StockMin, double dt, double d_x)
+		: Time(Time), StockMax(StockMax), TimeNumber(floor((Time-0)/dt) +1), StockNumber(floor((StockMax - StockMin) / d_x) + 1), dt(dt)
 	{
 
 		std::vector<double> test(StockNumber);
 		for (std::size_t i = 0; i < StockNumber; ++i)
 		{
-			test[i] = StockMin + i * dx;
+			test[i] = StockMin + i * d_x;
 		}
 		StockVector = test;
+		std::vector<double> test2(StockNumber-1);
+		for (std::size_t i = 0; i < StockNumber-1; ++i)
+		{
+			test2[i] = log(StockVector[i+1])-log(StockVector[i]);
+		}
+		dx = test2;
 	}
 
 	Grille::~Grille() {
@@ -32,7 +38,7 @@ namespace dauphine
 	double Grille::getdt() const{
 		return dt;
 	}
-	double Grille::getdx() const{
+	std::vector<double> Grille::getdx() const{
 		return dx;
 	}
 	size_t Grille :: GetTailleStock() const{
@@ -49,7 +55,7 @@ namespace dauphine
 	std::vector<double> Grille::getTimeVector() const{
 		std::vector<double> test(TimeNumber);
 
-		for (int i = 0; i < TimeNumber; i++) {
+		for (size_t i = 0; i < TimeNumber; i++) {
 			test[i] = 0 + i * dt;
 		}
 		return test;
