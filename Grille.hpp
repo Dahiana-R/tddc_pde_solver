@@ -7,13 +7,13 @@ namespace dauphine
 {
 	class Grille {
 	public:
-		Grille(double Time, double StockMax, double StockMin, double dt, double dx);
+		Grille(double Time, double StockMax, double StockMin, double dt, double d_x);
 		std::vector<double> getStockVector() const;
 		std::vector<double> getTimeVector() const;
 		double getdt() const;
 		size_t getTimeNumber() const;
 		size_t GetTailleStock() const;
-		double getdx() const;
+		std::vector<double> getdx() const;
 		~Grille();
 
 	private:
@@ -22,7 +22,7 @@ namespace dauphine
 		size_t TimeNumber;
 		size_t StockNumber;
 		double dt;
-		double dx;
+		std::vector<double> dx;
 		std::vector<double> StockVector;
 	};
 }
