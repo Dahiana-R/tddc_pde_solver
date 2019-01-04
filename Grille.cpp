@@ -21,7 +21,7 @@ namespace dauphine
 		std::vector<double> test(StockNumber);
 		for (std::size_t i = 0; i < StockNumber; ++i)
 		{
-			test[i] = 0 + i * dx;
+			test[i] = StockMin + i * dx;
 		}
 		StockVector = test;
 	}
@@ -35,10 +35,10 @@ namespace dauphine
 	double Grille::getdx() const{
 		return dx;
 	}
-	double Grille :: GetTailleStock() const{
+	size_t Grille :: GetTailleStock() const{
 		return StockNumber;
 	}
-	double Grille::getTimeNumber() const {
+	size_t Grille::getTimeNumber() const {
 		return TimeNumber;
 	}
 
