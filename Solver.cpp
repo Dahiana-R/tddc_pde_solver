@@ -69,7 +69,37 @@ namespace dauphine
 		return pricebackward;
 
 	}
+	std::vector<double> CrankNicholson(Grille mesh, Parameters param, Boundaries bound, std::vector<double>& precedent) {
 
+		//paramètre de gauche(avec Theta)
+		std::vector <double> aleft = Lower_diag_coeff(mesh, param, false);
+		std::vector <double> bleft = Mid_diag_coeff(mesh, param, false);
+		std::vector <double> cleft = Upper_diag_coeff(mesh, param, false);
+		//paramètre de droite(donc Theta-1)
+		std::vector <double> aright = Lower_diag_coeff(mesh, param, true);
+		std::vector <double> bright = Mid_diag_coeff(mesh, param, true);
+		std::vector <double> cright = Upper_diag_coeff(mesh, param, true);
+
+		//vecteur contenant tous les coef, on les calcule une fois on est tranquille, penser à changer sur les autres fonctions si je ne l'ai pas fait.
+		std::vector<std::vector<double>>coefficients{ aleft,bleft,cleft,aright,bright,cright };
+
+		//on va stocker les prix au temps t-1 la dedans
+		//on récupère expiry, mettre la fonction correctement....
+
+		std::vector<double>pricebackward = vectorpayoff(bound);
+		std::vector<double>d(pricebackward.size());
+
+		for (size_t i = 0; i < mesh.getTimeNumber() - 1; i++) {
+			if (i == mesh.getTimeNumber() - 2) {
+				precedent = pricebackward;
+			}
+			d = rightvector(mesh, param, pricebackward, bound, coefficients, i);
+			pricebackward = LinearTriDiagSolver(d, coefficients);
+		}
+
+		return pricebackward;
+
+	}
 	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilisé la première méthode)
 	//OK VALIDE
 	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients) {
