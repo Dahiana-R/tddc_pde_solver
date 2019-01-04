@@ -12,7 +12,7 @@ namespace dauphine
 		~Boundaries();
 		std::vector<double> getupercondition();
 		std::vector<double> getlowercondition();
-
+		std::vector<double> getpayoff();
 	private:
 		std::vector<double> UperCondition;
 		std::vector<double> LowerCondition;
