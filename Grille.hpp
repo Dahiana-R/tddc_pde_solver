@@ -8,6 +8,7 @@ namespace dauphine
 	class Grille {
 	public:
 		Grille(double Time, double StockMax, double StockMin, double dt, double d_x);
+		Grille(double Time, double Spot, double stddev, double dt, size_t NombrePas, double useless);
 		std::vector<double> getStockVector() const;
 		std::vector<double> getTimeVector() const;
 		double getdt() const;
