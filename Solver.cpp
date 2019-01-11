@@ -3,7 +3,10 @@
 #include <math.h>
 
 namespace dauphine
-{
+{/*
+ //ancienne formule pour calculer les coef, ne marche pas alors que c'est pareil qu'en bas....
+
+
 	std::vector<double> Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
 		std::vector <double> test(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
@@ -39,8 +42,43 @@ namespace dauphine
 			}
 		}
 		return test;
+	}*/
+	std::vector<double> Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
+			if (isright == false) {
+				test[i] = (1. + param.GetTheta()*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+			}
+			else {
+				test[i] = (1. + (param.GetTheta() - 1.)*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+			}
+		}
+		return test;
 	}
-
+	std::vector<double> Upper_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < test.size(); i++) {
+			if (isright == false) {
+				test[i] = 0.5*param.GetTheta() * mesh.getdt()*((-pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+			}
+			else {
+				test[i] = 0.5*(param.GetTheta()-1) * mesh.getdt()*((-pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+			}
+		}
+		return test;
+	}
+	std::vector<double> Lower_diag_coeff(Grille mesh, Parameters param, bool isright) {
+		std::vector <double> test(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < test.size(); i++) {
+			if (isright == false) {
+				test[i] = -0.5*param.GetTheta() * mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+			}
+			else {
+				test[i] = -0.5*(param.GetTheta()-1) * mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+			}
+		}
+		return test;
+	}
 	std::vector<double> CrankNicholson(Grille mesh, Parameters param, Boundaries bound) {
 
 		//paramètre de gauche(avec Theta)
