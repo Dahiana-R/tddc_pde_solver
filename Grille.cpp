@@ -1,5 +1,6 @@
 #include "Grille.hpp"
 #include <vector>
+#include <cmath>
 
 namespace dauphine
 {
