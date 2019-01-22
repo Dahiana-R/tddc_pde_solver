@@ -2,7 +2,9 @@
 #define GRILLE_HPP
 
 #include <vector>
+
 #include <cmath>
+
 
 namespace dauphine
 {
