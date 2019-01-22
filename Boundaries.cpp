@@ -1,5 +1,6 @@
 #include "Boundaries.hpp"
 #include <vector>
+#include <cmath>
 
 namespace dauphine
 {
