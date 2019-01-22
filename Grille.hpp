@@ -2,7 +2,7 @@
 #define GRILLE_HPP
 
 #include <vector>
-
+//
 namespace dauphine
 {
 	class Grille {

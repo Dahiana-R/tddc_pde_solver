@@ -29,7 +29,7 @@ namespace dauphine
 		StockMax = (log(Spot) + 5 * stddev*sqrt(Time));
 		double StockMin= (log(Spot) - 5 * stddev*sqrt(Time));
 
-		//On règle le problème des valeurs impaires, c'est très mal fait; à changer.
+		//On règle le problème des valeurs impaires, c'est très mal fait; a changer.
 		if (NombrePas % 2 == 0) {
 			StockNumber = NombrePas;
 		}
