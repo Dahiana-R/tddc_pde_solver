@@ -8,17 +8,42 @@
 #include "Grille.hpp"
 #include "Boundaries.hpp"
 
-namespace dauphine {
-	double payoff(double x) {
-		return std::max(x-100., 0.);
-	}
 
-	std::vector<double> essai(double spot) {
-		Parameters param(0.2, 0., 0.5);
+
+	double payoff(double x) {
+		return std::max(x-100, 0.);
+	}
+    
+
+
+    std::vector<double> essai() {
+        double spot;
+        double strike;
+        double volatility;
+        double maturity;
+        double rate;
+        double theta;
+        
+        std::cout << "Underlying Spot Price:" << std::endl;
+        std::cin >> spot;
+        std:: cout << "Strike Price:" << std::endl;
+        std::cin >> strike;
+        std::cout << "Volatility:" << std::endl;
+        std::cin >> volatility;
+        std::cout << "Risk free rate:" << std::endl;
+        std::cin >> rate;
+        std::cout << "Maturity (in years):" << std::endl;
+        std::cin >> maturity;
+        std::cout << " " << std::endl;
+        std::cout << "Theta:" << std::endl;
+        std::cin >> theta;
+        bool istrue = true;
+        
+        dauphine::Parameters param(volatility, rate, theta);
 		//Grille mesh(1., 200, 20, (1. / 252.) , 0.5);
 		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
-		Grille mesh(1., 100., 0.2, (1. / 252.), 1000, 0.2);
-		Boundaries bound(mesh, param, payoff);
+        dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
+        dauphine::Boundaries bound(mesh, param, payoff);
 		//test
 		std::vector<double> avantdernier(mesh.getTimeNumber());
 		//
@@ -34,7 +59,7 @@ namespace dauphine {
 		//test avec adresse
 
 		
-		std::vector<double> solution(4);
+		std::vector<double> solution(5);
 		//on cherche l'index pour lequel on veut le prix
 		auto iter = std::find(stock.begin(), stock.end(), spot);
 		size_t index = std::distance(stock.begin(), iter);
@@ -48,7 +73,11 @@ namespace dauphine {
 		{
 			std::cout << stock[i] << " : " << price[i] << std::endl;
 		}
+        
+        solution[4]= dauphine::bs_price(spot, strike, volatility, maturity, istrue);
+        solution[5] = spot; // a modif
 		return solution;
+        
 		/*std::vector<double> coef = dauphine::Mid_diag_coeff(mesh, param, false);
 		for (std::size_t i = 0; i < 50; i++)
 		{
@@ -56,33 +85,14 @@ namespace dauphine {
 		}*/
 	}
 
-}
+//}
 
 int main(int argc, char* argv[])
 {
-	double spot=100;
-	double strike = 100;
-	double volatility=0.2;
-	double maturity=1.;
-	bool istrue = true;
+	std::vector<double> solution = essai();
+    std::cout << "BS Price is:"<< solution[4] << std::endl;
 
-    //Saisie des données initiales
-    /*std::cout << "Underlying Spot Price:" << std::endl;
-    std::cin >> spot;
-    std:: cout << "Strike Price:" << std::endl;
-    std::cin >> strike;
-    std::cout << "Volatility:" << std::endl;
-    std::cin >> volatility;
-    std::cout << "Maturity (in days):" << std::endl;
-    std::cin >> maturity;
-    std::cout << " " << std::endl;
-    */
-	std::cout << "BS Price is:"<< dauphine::bs_price(spot, strike, volatility, maturity, istrue) << std::endl;
-
-
-	std::cout << "Nicholson Crank:" << std::endl;	
-	std::vector<double> solution = dauphine::essai(spot);
-	std::cout << "Nicholson Price for S = "<< spot<< " is : " << solution[0] << std::endl;
+	std::cout << "Nicholson Price for S = "<< solution[5] << " is : " << solution[0] << std::endl;
 	std::cout << "The Delta is " << solution[1] << std::endl;
 	std::cout << "The Gamma is " << solution[2] << std::endl;
 	std::cout << "The Theta is " << solution[3] <<std::endl;
