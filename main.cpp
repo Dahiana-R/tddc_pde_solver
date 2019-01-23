@@ -60,14 +60,14 @@ namespace dauphine {
 
 int main(int argc, char* argv[])
 {
-	double spot;
-	double strike;
-	double volatility;
-	double maturity;
+	double spot=100;
+	double strike = 100;
+	double volatility=0.2;
+	double maturity=1.;
 	bool istrue = true;
 
     //Saisie des données initiales
-    std::cout << "Underlying Spot Price:" << std::endl;
+    /*std::cout << "Underlying Spot Price:" << std::endl;
     std::cin >> spot;
     std:: cout << "Strike Price:" << std::endl;
     std::cin >> strike;
@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
     std::cout << "Maturity (in days):" << std::endl;
     std::cin >> maturity;
     std::cout << " " << std::endl;
-    
+    */
 	std::cout << "BS Price is:"<< dauphine::bs_price(spot, strike, volatility, maturity, istrue) << std::endl;
 
 

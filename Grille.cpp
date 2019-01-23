@@ -42,21 +42,16 @@ namespace dauphine
 		std::vector<double> test(StockNumber);
 
 		//On peut combiner les deux boucles, je me suis pris la tete.
-		for (int i = 0; i < StockNumber / 2 - 1; ++i)
-		{
-			test[i] = center + (i - floor(StockNumber / 2) + 1) * dx_test;
-			test[i] = exp(test[i]);
-		}
 
-		for (std::size_t i = 0; i < StockNumber/2 + 1; ++i)
+		for (std::size_t i = 0; i < StockNumber ; ++i)
 		{
 			//on fait une exception de facon a avoir pile le spot et pas un arrondi du style 100.0000000001
-			if (i == 0) {
-				test[i + StockNumber / 2 - 1] = Spot;
+			if (i == StockNumber / 2 - 1) {
+				test[i] = Spot;
 			}
 			else {
-				test[i + StockNumber / 2 - 1] = log(Spot) + i * dx_test;
-				test[i + StockNumber / 2 - 1] = exp(test[i + StockNumber / 2 - 1]);
+				test[i] = log(Spot) + (i - floor(StockNumber / 2) + 1 )* dx_test;
+				test[i] = exp(test[i]);
 			}
 		}
 
