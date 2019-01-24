@@ -5,6 +5,8 @@
 #include "Parameters.hpp"
 #include "Boundaries.hpp"
 #include "Payoffs.hpp"
+#include "Rates.hpp"
+#include "Volatility.hpp"
 #include <vector>
 
 namespace dauphine

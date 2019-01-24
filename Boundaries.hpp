@@ -3,6 +3,8 @@
 #include "Grille.hpp"
 #include "Parameters.hpp"
 #include "Payoffs.hpp"
+#include "Rates.hpp"
+#include "Volatility.hpp"
 #include <vector>
 
 namespace dauphine
