@@ -39,13 +39,43 @@
         std::cout << "Theta:" << std::endl;
         std::cin >> theta;
         bool istrue = true;
-        
+		/*
+		//COEF POUR NEUMAN
+	double ATheta(Grille mesh, Parameters param, bool isright) {
+			if (isright == false) {
+				return (1. + param.GetTheta()*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2) + param.GetRate() - 0.5 * (pow(param.GetVol(), 2) - param.GetRate()))) ;
+			}
+			else {
+				return (1. + (param.GetTheta() - 1.)*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2) + param.GetRate() - 0.5 * (pow(param.GetVol(), 2) - param.GetRate())));
+			}
+		
+	}
+	double BTheta(Grille mesh, Parameters param, bool isright) {
+		if (isright == false) {
+			return (param.GetTheta()*mesh.getdt()*(pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2) + 0.5 *(pow(param.GetVol(), 2) - param.GetRate())/ mesh.getdx()[0]));
+		}
+		else {
+			return ((param.GetTheta() - 1.)*mesh.getdt()*(pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2) + 0.5 *(pow(param.GetVol(), 2) - param.GetRate()) / mesh.getdx()[0]));
+		}
+	}
+	
+
+	double CTheta(Grille mesh, Parameters param, bool isright) {
+		if (isright == false) {
+			return (param.GetTheta()*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2)));
+		}
+		else {
+			return ((param.GetTheta() - 1.)*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2)));
+		}
+	}
+	//FIN COEF NEUMAN;	
+		*/
         
         dauphine::Parameters param(volatility, rate, theta);
 		//Grille mesh(1., 200, 20, (1. / 252.) , 0.5);
 		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
         dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
-        dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff);
+        dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff  
 		
         /*//test
         std::vector<double> avantdernier(mesh.getTimeNumber());
