@@ -8,7 +8,7 @@ namespace dauphine
     class Payoffs {
     public:
         Payoffs();
-        static double getThePayoff(double spot, double strike);
+        static double getThePayoff(double spot, double strike); // fonction statique pour éviter de créer un objet payoff, utile pour mettre en paramètre dans l'objet boundaries
         ~Payoffs();
         
     private:
