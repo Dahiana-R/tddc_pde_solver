@@ -1,4 +1,5 @@
 #include "Solver.hpp"
+#include <iostream>
 #include <vector>
 #include <math.h>
 
@@ -202,4 +203,32 @@ namespace dauphine
 		stockprice.erase(stockprice.begin());
 		return stockprice;
 	}
+    
+    std::vector<double> solving(Parameters param, Grille mesh, Boundaries bound){
+        std::vector<double> avantdernier(mesh.getTimeNumber());
+        std::vector<double> price = dauphine::CrankNicholson(mesh, param, bound, avantdernier);
+        std::vector<double> payoff = bound.getpayoff();
+        std::vector<double> stock = mesh.getStockVector();
+        double spot = mesh.getSpot();
+        price.push_back(bound.getupercondition()[mesh.getTimeNumber() - 1]);
+        price.insert(price.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 1]);
+        avantdernier.push_back(bound.getupercondition()[mesh.getTimeNumber() - 2]);
+        avantdernier.insert(avantdernier.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 2]);
+        std::vector<double> solved(3);
+        
+        auto iter = std::find(stock.begin(), stock.end(), spot);
+        size_t index = std::distance(stock.begin(), iter);
+        //on le met dans un vecteur
+        solved[0]= price[index];
+        solved[1] = (price[index + 1] - price[index - 1]) / (stock[index + 1] - stock[index - 1]);
+        solved[2] = (price[index + 1] - 2*price[index] + price[index - 1]) / (pow((stock[index + 1] - stock[index]),2));
+        solved[3] = (avantdernier[index] - price[index]) / (1);
+        
+        for (std::size_t i = index-10; i < index+10; i++)
+        {
+            std::cout << stock[i] << " : " << price[i] << std::endl;
+        }
+        return solved;
+
+    }
 }
