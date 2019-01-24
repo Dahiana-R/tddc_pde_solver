@@ -4,6 +4,7 @@
 #include "Grille.hpp"
 #include "Parameters.hpp"
 #include "Boundaries.hpp"
+#include "Payoffs.hpp"
 #include <vector>
 
 namespace dauphine

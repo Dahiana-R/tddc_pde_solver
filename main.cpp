@@ -7,16 +7,18 @@
 #include "Parameters.hpp"
 #include "Grille.hpp"
 #include "Boundaries.hpp"
+#include "Payoffs.hpp"
 
 
 
-	double payoff(double x) {
-		return std::max(x-100, 0.);
-	}
-    
+//    double payoff(double x) {
+//        return std::max(x-100, 0.);
+//    }
 
 
-    std::vector<double> essai() {
+
+    std::vector<double> essai()
+    {
         double spot;
         double strike;
         double volatility;
@@ -34,16 +36,16 @@
         std::cin >> rate;
         std::cout << "Maturity (in years):" << std::endl;
         std::cin >> maturity;
-        std::cout << " " << std::endl;
         std::cout << "Theta:" << std::endl;
         std::cin >> theta;
         bool istrue = true;
+        
         
         dauphine::Parameters param(volatility, rate, theta);
 		//Grille mesh(1., 200, 20, (1. / 252.) , 0.5);
 		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
         dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
-        dauphine::Boundaries bound(mesh, param, payoff);
+        dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff);
 		
         /*//test
         std::vector<double> avantdernier(mesh.getTimeNumber());
