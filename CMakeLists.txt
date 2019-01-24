@@ -34,6 +34,10 @@ set(PDE_SOLVER_SRCS
     Solver.cpp
     Payoffs.hpp
     Payoffs.cpp
+    Volatility.hpp
+    Volatility.cpp
+    Rates.hpp
+    Rates.cpp
     )
 
 set(PDE_SOLVER_TARGET pde_solver)

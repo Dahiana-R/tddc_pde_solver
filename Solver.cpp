@@ -48,10 +48,10 @@ namespace dauphine
 		std::vector <double> test(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
 			if (isright == false) {
-				test[i] = (1. + param.GetTheta()*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+                test[i] = (1. + param.GetTheta()*mesh.getdt()*((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())));
 			}
 			else {
-				test[i] = (1. + (param.GetTheta() - 1.)*mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + param.GetRate()));
+                test[i] = (1. + (param.GetTheta() - 1.)*mesh.getdt()*((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())));
 			}
 		}
 		return test;
@@ -60,10 +60,10 @@ namespace dauphine
 		std::vector <double> test(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < test.size(); i++) {
 			if (isright == false) {
-				test[i] = 0.5*param.GetTheta() * mesh.getdt()*((-pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+                test[i] = 0.5*param.GetTheta() * mesh.getdt()*((-pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + ((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) - dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())) / (2.0*mesh.getdx()[i])));
 			}
 			else {
-				test[i] = 0.5*(param.GetTheta()-1) * mesh.getdt()*((-pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+                test[i] = 0.5*(param.GetTheta()-1) * mesh.getdt()*((-pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + ((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) - dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())) / (2.0*mesh.getdx()[i])));
 			}
 		}
 		return test;
@@ -72,10 +72,10 @@ namespace dauphine
 		std::vector <double> test(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < test.size(); i++) {
 			if (isright == false) {
-				test[i] = -0.5*param.GetTheta() * mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+                test[i] = -0.5*param.GetTheta() * mesh.getdt()*((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + ((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) - dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())) / (2.0*mesh.getdx()[i])));
 			}
 			else {
-				test[i] = -0.5*(param.GetTheta()-1) * mesh.getdt()*((pow(param.GetVol(), 2) / pow(mesh.getdx()[i], 2)) + ((pow(param.GetVol(), 2) - param.GetRate()) / (2.0*mesh.getdx()[i])));
+                test[i] = -0.5*(param.GetTheta()-1) * mesh.getdt()*((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) / pow(mesh.getdx()[i], 2)) + ((pow(dauphine::Volatility::getVolatility(mesh.getdx()[i], mesh.getdt(), param.GetVol()), 2) - dauphine::Rates::getRate(mesh.getdx()[i], mesh.getdt(), param.GetRate())) / (2.0*mesh.getdx()[i])));
 			}
 		}
 		return test;
