@@ -25,6 +25,7 @@
         double maturity;
         double rate;
         double theta;
+        int cp;
         
         std::cout << "Underlying Spot Price:" << std::endl;
         std::cin >> spot;
@@ -38,6 +39,8 @@
         std::cin >> maturity;
         std::cout << "Theta:" << std::endl;
         std::cin >> theta;
+        std::cout << "1.Call /n2.Put:" << std::endl;
+        std::cin >> cp;
         bool istrue = true;
 		/*
 		//COEF POUR NEUMAN
@@ -72,10 +75,47 @@
 		*/
         
         dauphine::Parameters param(volatility, rate, theta);
-		//Grille mesh(1., 200, 20, (1. / 252.) , 0.5);
-		//test pour un dx fix� en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
+		
+		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
         dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
-        dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier param�tre on prend la fonction statique du payoff  
+        
+        //dauphine::Boundaries bound;
+        std::vector<double> solution;
+        
+      　if (cp == 1){
+            dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::call);
+            solution = dauphine::solving(param,  mesh,  bound);
+            solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
+            //solution.push_back(temp[0]);
+            //solution.push_back(temp[1]);
+            //solution.push_back(temp[2]);
+            //solution.push_back(temp[3]);
+        }
+        else if(cp == 2){
+            dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::put);
+            solution = dauphine::solving(param,  mesh,  bound);
+            solution.push_back(0.000);
+        }
+        
+            /*
+            std::vector<double> temp = dauphine::solving(param,  mesh,  bound);
+            solution.push_back(temp[0]);
+            solution.push_back(temp[1]);
+            solution.push_back(temp[2]);
+            solution.push_back(temp[3]);
+        }
+        else{
+            dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff);
+            std::vector<double> temp = dauphine::solving(param,  mesh,  bound);
+            solution.push_back(temp[0]);
+            solution.push_back(temp[1]);
+            solution.push_back(temp[2]);
+            solution.push_back(temp[3]);
+        }*/
+        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff
+
+        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff  
+
 		
         /*//test
         std::vector<double> avantdernier(mesh.getTimeNumber());
@@ -108,9 +148,9 @@
 			std::cout << stock[i] << " : " << price[i] << std::endl;
 		}*/
         
-        std::vector<double> solution = dauphine::solving(param,  mesh,  bound);
+        //std::vector<double> solution = dauphine::solving(param,  mesh,  bound);
                                     
-        solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
+        //solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
         solution.push_back(spot); // a modif
 		return solution;
         
@@ -126,7 +166,12 @@
 int main(int argc, char* argv[])
 {
 	std::vector<double> solution = essai();
-    std::cout << "BS Price is:"<< solution[4] << std::endl;
+    if(solution[4]!= 0.000){
+        std::cout << "BS Price is:"<< solution[4] << std::endl;
+    }
+    else {
+        std::cout << "BS Price is not available for this product" << std::endl;
+    }
 
 	std::cout << "Nicholson Price for S = "<< solution[5] << " is : " << solution[0] << std::endl;
 	std::cout << "The Delta is " << solution[1] << std::endl;
