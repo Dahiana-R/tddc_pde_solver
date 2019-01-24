@@ -32,7 +32,8 @@ set(PDE_SOLVER_SRCS
     Parameters.cpp
     Solver.hpp
     Solver.cpp
-
+    Payoffs.hpp
+    Payoffs.cpp
     )
 
 set(PDE_SOLVER_TARGET pde_solver)

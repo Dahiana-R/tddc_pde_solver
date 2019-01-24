@@ -2,13 +2,14 @@
 #define Boundaries_HPP
 #include "Grille.hpp"
 #include "Parameters.hpp"
+#include "Payoffs.hpp"
 #include <vector>
 
 namespace dauphine
 {// définir les boundaries faire une sous classe pour condition de Neuman/Dirichlet?
 	class Boundaries {
 	public:
-		Boundaries(Grille mesh, Parameters param, double(*f)(double x));
+		Boundaries(Grille mesh, Parameters param, double strike, double(*f)(double spot, double strike));
 		~Boundaries();
 		std::vector<double> getupercondition();
 		std::vector<double> getlowercondition();

@@ -4,14 +4,14 @@
 
 namespace dauphine
 {
-	Boundaries::Boundaries(Grille mesh,Parameters param, double(*f)(double x))
+	Boundaries::Boundaries(Grille mesh,Parameters param, double strike, double(*f)(double spot, double strike))
 	{//surement à modifier par la suite pour rentre le truc souple, "placebo" pour l'instant
-
+        
 		Payoff = mesh.getStockVector();
 		std::vector<double> test_1(mesh.getTimeNumber());
 		std::vector<double> test_2(mesh.getTimeNumber());
 		for (size_t i = 0; i < mesh.GetTailleStock(); i++) {
-			Payoff[i] = f(Payoff[i]);
+			Payoff[i] = f(Payoff[i], strike);
 		}
 		
 		for (int i = 0; i< mesh.getTimeNumber(); i++) {
