@@ -4,7 +4,7 @@
 
 namespace dauphine
 {
-	Grille::Grille(double Time, double StockMax, double StockMin, double dt, double d_x)
+	/*Grille::Grille(double Time, double StockMax, double StockMin, double dt, double d_x)
 		: Time(Time), StockMax(StockMax), TimeNumber(floor((Time-0)/dt) +1), StockNumber(floor((StockMax - StockMin) / d_x) + 1), dt(dt)
 	{
 
@@ -20,10 +20,10 @@ namespace dauphine
 			test2[i] = log(StockVector[i+1])-log(StockVector[i]);
 		}
 		dx = test2;
-	}
+	}*/
 
 	Grille::Grille(double Time, double Spot, double stddev, double dt, size_t NombrePas, double useless)
-		: Time(Time), TimeNumber(floor((Time - 0) / dt) + 1), dt(dt)
+		: Time(Time), TimeNumber(floor((Time - 0) / dt) + 1), dt(dt), Spot(Spot)
 	{
 
 		double center = log(Spot);
@@ -73,6 +73,9 @@ namespace dauphine
 	double Grille::getdt() const{
 		return dt;
 	}
+    double Grille::getSpot() const {
+        return Spot;
+    }
 	std::vector<double> Grille::getdx() const{
 		return dx;
 	}
@@ -82,6 +85,7 @@ namespace dauphine
 	size_t Grille::getTimeNumber() const {
 		return TimeNumber;
 	}
+    
 
 	std::vector<double> Grille::getStockVector() const{
 

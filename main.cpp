@@ -44,8 +44,9 @@
 		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
         dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
         dauphine::Boundaries bound(mesh, param, payoff);
-		//test
-		std::vector<double> avantdernier(mesh.getTimeNumber());
+		
+        /*//test
+        std::vector<double> avantdernier(mesh.getTimeNumber());
 		//
 		std::vector<double> price = dauphine::CrankNicholson(mesh, param, bound, avantdernier);
 		std::vector<double> payoff = bound.getpayoff();
@@ -60,6 +61,7 @@
 
 		
 		std::vector<double> solution(5);
+        
 		//on cherche l'index pour lequel on veut le prix
 		auto iter = std::find(stock.begin(), stock.end(), spot);
 		size_t index = std::distance(stock.begin(), iter);
@@ -72,10 +74,12 @@
 		for (std::size_t i = index-10; i < index+10; i++)
 		{
 			std::cout << stock[i] << " : " << price[i] << std::endl;
-		}
+		}*/
         
-        solution[4]= dauphine::bs_price(spot, strike, volatility, maturity, istrue);
-        solution[5] = spot; // a modif
+        std::vector<double> solution = dauphine::solving(param,  mesh,  bound);
+                                    
+        //solution[4]= dauphine::bs_price(spot, strike, volatility, maturity, istrue);
+        //solution[5] = spot; // a modif
 		return solution;
         
 		/*std::vector<double> coef = dauphine::Mid_diag_coeff(mesh, param, false);

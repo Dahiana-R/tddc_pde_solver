@@ -1,5 +1,6 @@
 #ifndef Solver_HPP
 #define Solver_HPP
+#include <iostream>
 #include "Grille.hpp"
 #include "Parameters.hpp"
 #include "Boundaries.hpp"
@@ -26,6 +27,8 @@ namespace dauphine
 	std::vector<double> Upper_diag_coeff(Grille mesh, Parameters param, bool isright);
 	std::vector<double> Lower_diag_coeff(Grille mesh, Parameters param, bool isright);
 
+    //application du solver
+    std::vector<double> solving(Parameters param, Grille mesh, Boundaries bound);
 }
 
 #endif
