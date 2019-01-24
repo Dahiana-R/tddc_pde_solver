@@ -15,7 +15,10 @@ namespace dauphine
 		~Parameters();
 
 	private:
-		std::vector <double> param;
+		//std::vector <double> param;
+		double m_volatility;
+		double m_rate;
+		double m_theta;
 	};
 }
 
