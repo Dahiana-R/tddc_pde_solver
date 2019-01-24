@@ -78,8 +78,8 @@
         
         std::vector<double> solution = dauphine::solving(param,  mesh,  bound);
                                     
-        //solution[4]= dauphine::bs_price(spot, strike, volatility, maturity, istrue);
-        //solution[5] = spot; // a modif
+        solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
+        solution.push_back(spot); // a modif
 		return solution;
         
 		/*std::vector<double> coef = dauphine::Mid_diag_coeff(mesh, param, false);

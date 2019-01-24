@@ -214,7 +214,7 @@ namespace dauphine
         price.insert(price.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 1]);
         avantdernier.push_back(bound.getupercondition()[mesh.getTimeNumber() - 2]);
         avantdernier.insert(avantdernier.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 2]);
-        std::vector<double> solved(3);
+        std::vector<double> solved(4);
         
         auto iter = std::find(stock.begin(), stock.end(), spot);
         size_t index = std::distance(stock.begin(), iter);
