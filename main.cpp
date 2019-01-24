@@ -76,12 +76,13 @@
         
         dauphine::Parameters param(volatility, rate, theta);
 		
-		//test pour un dx fix� en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
+		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
         dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
         
         //dauphine::Boundaries bound;
         std::vector<double> solution;
-        if (cp == 1){
+        
+      　if (cp == 1){
             dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::call);
             solution = dauphine::solving(param,  mesh,  bound);
             solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
@@ -111,7 +112,10 @@
             solution.push_back(temp[2]);
             solution.push_back(temp[3]);
         }*/
-        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier param�tre on prend la fonction statique du payoff
+        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff
+
+        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff  
+
 		
         /*//test
         std::vector<double> avantdernier(mesh.getTimeNumber());
