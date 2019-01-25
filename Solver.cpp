@@ -116,7 +116,7 @@ namespace dauphine
 		return test;
 	}
 
-	//la fonction tourne, le fait que ca renvoie ou non le bon résultat est sujet à débat	.
+	//la fonction tourne, le fait que ca renvoie ou non le bon resultat est sujet à debat	.
 	std::vector<double> rightvector(Grille mesh, Parameters param, std::vector<double> f_n1, Boundaries bound, std::vector<std::vector<double>> coefficients,size_t time) {
 
 		std::vector<double> test(f_n1.size());

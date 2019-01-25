@@ -7,7 +7,7 @@ namespace dauphine
     }
     double Rates::getRate(double dx, double dt, double rate)
     {
-        return rate; // fonction à changer selon le modèle utilisé, retourne une constante dans notre cas
+        return rate; // fonction à changer selon le modele utilise, retourne une constante dans notre cas
     }
     Rates::~Rates()
     {

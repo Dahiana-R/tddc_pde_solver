@@ -5,7 +5,7 @@
 
 namespace dauphine
 {
-	//Définition des paramètres qu'on prend en input, rajouter une classe vol et une classe rate avec des héritages pour bien spécifier, A FAIRE.
+	//Definition des parametres qu'on prend en input, rajouter une classe vol et une classe rate avec des heritages pour bien specifier, A FAIRE.
 	class Parameters {
 	public:
 		Parameters(double volatility, double rate, double theta);
