@@ -8,7 +8,7 @@
 #include <vector>
 
 namespace dauphine
-{// définir les boundaries faire une sous classe pour condition de Neuman/Dirichlet?
+{// définir les boundaries faire une sous classe pour condition de Neuman/Dirichlet
 	class Boundaries {
 	public:
 		Boundaries(void);

@@ -160,6 +160,7 @@ namespace dauphine
         price.insert(price.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 1]);
         avantdernier.push_back(bound.getupercondition()[mesh.getTimeNumber() - 2]);
         avantdernier.insert(avantdernier.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 2]);
+        
         std::vector<double> solved(4);
         
         auto iter = std::find(stock.begin(), stock.end(), spot);
@@ -170,10 +171,11 @@ namespace dauphine
         solved[2] = (price[index + 1] - 2*price[index] + price[index - 1]) / (pow((stock[index + 1] - stock[index]),2));
         solved[3] = (avantdernier[index] - price[index]) / (1);
         
-        for (std::size_t i = index-10; i < index+10; i++)
+        //to see the details uncomment the following
+        /*for (std::size_t i = index-10; i < index+10; i++)
         {
             std::cout << stock[i] << " : " << price[i] << std::endl;
-        }
+        }*/
         return solved;
 
     }
