@@ -14,13 +14,13 @@ namespace dauphine
 		Boundaries(void);
 		Boundaries(Grille mesh, Parameters param, double strike,double(*f)(double x,double strike));
 		~Boundaries();
-		std::vector<double> getupercondition();
+		std::vector<double> getuppercondition();
 		std::vector<double> getlowercondition();
 		std::vector<double> getpayoff();
 	protected:
 		std::vector<double> Payoff;
 	private:
-		std::vector<double> UperCondition;
+		std::vector<double> UpperCondition;
 		std::vector<double> LowerCondition;
 	};
 	class Neumann: public Boundaries {

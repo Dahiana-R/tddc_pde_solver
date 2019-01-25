@@ -129,9 +129,8 @@ int main(int argc, char* argv[])
             
         }
     
-    std::vector<char> time_step_list = {'A', 'B', 'C', 'D'}; //vect of possible product to adjust if new products added
+    std::vector<char> time_step_list = {'A', 'B', 'C', 'D'}; //vect of possible time steps
     
-    // inputs for pricing, limited inputs, rerequest values if they are out of scope
     std::cout << "Please choose your time step." << std::endl;
     std::cout << "a) Daily working days: 1./252. \nb) Daily: 1./365, \nc) Monthly: 30./365, \nd) Custom input in yearly decimals" << std::endl;
     
@@ -163,7 +162,6 @@ int main(int argc, char* argv[])
             std::cin.clear();
             std::cin.ignore(512, '\n');
             std::cout<< "You have entered a wrong input "<<std::endl;
-            
         };
         
     };

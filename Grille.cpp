@@ -10,7 +10,7 @@ namespace dauphine
 
 		double center = log(Spot);
 		StockMax = (log(Spot) + 5 * stddev*sqrt(Time));
-		double StockMin= (log(Spot) - 5 * stddev*sqrt(Time));
+		double StockMin = (log(Spot) - 5 * stddev*sqrt(Time));
 
 		//On regle le probleme des valeurs impaires, c'est tres mal fait; a changer.
 		if (NombrePas % 2 == 0) {
@@ -20,8 +20,9 @@ namespace dauphine
 			StockNumber = NombrePas + 1;
 		}
 
-		double dx_test = (StockMax - StockMin) / NombrePas;
-		std::vector<double> test(StockNumber);
+		double dx_step = (StockMax - StockMin) / NombrePas;
+		
+        std::vector<double> stock_vect(StockNumber);
 
 		//On peut combiner les deux boucles, je me suis pris la tete.
 
@@ -29,23 +30,19 @@ namespace dauphine
 		{
 			//on fait une exception de facon a avoir pile le spot et pas un arrondi du style 100.0000000001
 			if (i == StockNumber / 2 - 1) {
-				test[i] = Spot;
+				stock_vect[i] = Spot;
 			}
 			else {
-				test[i] = log(Spot) + (i - floor(StockNumber / 2) + 1 )* dx_test;
-				test[i] = exp(test[i]);
+				stock_vect[i] = log(Spot) + (i - floor(StockNumber / 2) + 1 )* dx_step;
+				stock_vect[i] = exp(stock_vect[i]);
 			}
 		}
 
-
-		std::vector<double> test2(StockNumber - 1);
-
-		for (std::size_t i = 0; i < StockNumber -1 ; ++i)
-		{
-			test2[i] = dx_test;
-		}
-		dx = test2;
-		StockVector = test;
+		std::vector<double> dx_vect(StockNumber - 1);
+        std::fill(dx_vect.begin(), dx_vect.end(), dx_step);
+        
+		dx = dx_vect;
+		StockVector = stock_vect;
 
 	}
 
@@ -74,12 +71,12 @@ namespace dauphine
 		return StockVector;
 	}
 	std::vector<double> Grille::getTimeVector() const{
-		std::vector<double> test(TimeNumber);
+		std::vector<double> dt_vect(TimeNumber);
 
 		for (size_t i = 0; i < TimeNumber; i++) {
-			test[i] = 0 + i * dt;
+			dt_vect[i] = 0 + i * dt;
 		}                                                                                                                                                                                        
-		return test;
+		return dt_vect;
 	}
 
 }
