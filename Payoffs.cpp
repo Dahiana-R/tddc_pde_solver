@@ -5,11 +5,9 @@ namespace dauphine
     Payoffs::Payoffs()
     {
     }
-    double Payoffs::getThePayoff(double spot, double strike)
-    {
-        return std::max(spot - strike, 0.); // fonction à adapter selon le payoff, un call dans notre cas
-    };
     
+    // For other products add the corresponding function at maturity, if there are more arguments than the spot and strike adjust the function in Boundaries too
+
     double Payoffs::call(double spot, double strike)
     {
         return std::max(spot - strike, 0.);
