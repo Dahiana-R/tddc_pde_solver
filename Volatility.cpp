@@ -7,7 +7,7 @@ namespace dauphine
     }
     double Volatility::getVolatility(double dx, double dt, double volatility)
     {
-        return volatility; // fonction à changer selon le modèle utilisé, retourne une constante dans notre cas
+        return volatility; // fonction à changer selon le modele utilise, retourne une constante dans notre cas
     }
     Volatility::~Volatility()
     {

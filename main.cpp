@@ -10,44 +10,6 @@
 #include "Payoffs.hpp"
 
 
-
-//    double payoff(double x) {
-//        return std::max(x-100, 0.);
-//    }
-
-
-
-    std::vector<double> essai()
-    {
-        double spot;
-        double strike;
-        double volatility;
-        double maturity;
-        double rate;
-        double theta;
-        int product;
-        
-        std::cout << "1.Call Option \n2.Put Option, \n3.Other Products:" << std::endl;
-        std::cin >> product;
-        if (product == 3){
-            std::cout << "Not available yet, please request implementation" << std::endl;
-            exit(0);
-
-        }
-
-        std::cout << "Underlying Spot Price:" << std::endl;
-        std::cin >> spot;
-        std:: cout << "Strike Price:" << std::endl;
-        std::cin >> strike;
-        std::cout << "Volatility:" << std::endl;
-        std::cin >> volatility;
-        std::cout << "Risk free rate:" << std::endl;
-        std::cin >> rate;
-        std::cout << "Maturity (in years):" << std::endl;
-        std::cin >> maturity;
-        std::cout << "Theta:" << std::endl;
-        std::cin >> theta;
-                bool istrue = true;
 		/*
 		//COEF POUR NEUMAN
 	double ATheta(Grille mesh, Parameters param, bool isright) {
@@ -79,41 +41,6 @@
 	}
 	//FIN COEF NEUMAN;	
 		*/
-        
-        dauphine::Parameters param(volatility, rate, theta);
-		
-		//test pour un dx fixé en prenant comme frontiere spot +- 5stddev racine T. On centre sur le spot.
-        dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
-        
-
-        std::vector<double> solution;
-        
-        if (product == 1){
-            dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::call);
-            solution = dauphine::solving(param,  mesh,  bound);
-            solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, istrue));
-
-        }
-        
-        else if(product == 2){
-            dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::put);
-            solution = dauphine::solving(param,  mesh,  bound);
-            solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, false));
-            //solution.push_back(0.000);
-        }
-        
-
-
-        //dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::getThePayoff); // en dernier paramètre on prend la fonction statique du payoff  
-
-
-        solution.push_back(spot); // a modif
-		return solution;
-        
-
-	}
-
-
 
 int main(int argc, char* argv[])
 {
@@ -123,7 +50,10 @@ int main(int argc, char* argv[])
     double maturity;
     double rate;
     double theta;
+    double time_step_value;
+    double space_step;
     char product;
+    char time_step;
     std::vector<double> solution;
 
     
@@ -199,9 +129,57 @@ int main(int argc, char* argv[])
             
         }
     
+    std::vector<char> time_step_list = {'A', 'B', 'C', 'D'}; //vect of possible product to adjust if new products added
+    
+    // inputs for pricing, limited inputs, rerequest values if they are out of scope
+    std::cout << "Please choose your time step." << std::endl;
+    std::cout << "a) Daily working days: 1./252. \nb) Daily: 1./365, \nc) Monthly: 30./365, \nd) Custom input in yearly decimals" << std::endl;
+    
+    std::cin >> time_step;
+    time_step = toupper(time_step);
+    
+    while(std::find(time_step_list.begin(), time_step_list.end(), time_step) == time_step_list.end())
+    {
+        std::cout << "Wrong input, please enter one of the proposed options. " << std::endl;
+        std::cin >> time_step;
+        time_step = toupper(time_step);
+    };
+  
+    if (time_step == 'A'){
+        time_step_value = 1./252.;
+        
+    }
+    else if (time_step == 'B'){
+        time_step_value = 1./365.;
+        
+    }
+    else if (time_step == 'C'){
+        time_step_value = 30./365.;
+        
+    }
+    else if (time_step == 'D'){
+        std::cout << "yearly decimals: eg. 0.5 for semi-annually, 1 for yearly" << std::endl;
+        while (!(std::cin >> time_step_value)) {
+            std::cin.clear();
+            std::cin.ignore(512, '\n');
+            std::cout<< "You have entered a wrong input "<<std::endl;
+            
+        };
+        
+    };
+    
+    std::cout << "Total Space steps (Optimal: 1000):" << std::endl;
+    
+    while (!(std::cin >> space_step)) {
+        std::cin.clear();
+        std::cin.ignore(512, '\n');
+        std::cout<< "You have entered a wrong input. Total Space Steps: "<<std::endl;
+        
+    }
+    
     dauphine::Parameters param(volatility, rate, theta);
     
-    dauphine::Grille mesh(maturity, spot, volatility, (1. / 252.), 1000, 0.2);
+    dauphine::Grille mesh(maturity, spot, volatility, time_step_value, space_step);
     
     if (product == 'A'){
         dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::call);

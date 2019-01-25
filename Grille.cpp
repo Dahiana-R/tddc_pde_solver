@@ -4,25 +4,7 @@
 
 namespace dauphine
 {
-	/*Grille::Grille(double Time, double StockMax, double StockMin, double dt, double d_x)
-		: Time(Time), StockMax(StockMax), TimeNumber(floor((Time-0)/dt) +1), StockNumber(floor((StockMax - StockMin) / d_x) + 1), dt(dt)
-	{
-
-		std::vector<double> test(StockNumber);
-		for (std::size_t i = 0; i < StockNumber; ++i)
-		{
-			test[i] = StockMin + i * d_x;
-		}
-		StockVector = test;
-		std::vector<double> test2(StockNumber-1);
-		for (std::size_t i = 0; i < StockNumber-1; ++i)
-		{
-			test2[i] = log(StockVector[i+1])-log(StockVector[i]);
-		}
-		dx = test2;
-	}*/
-
-	Grille::Grille(double Time, double Spot, double stddev, double dt, size_t NombrePas, double useless)
+	Grille::Grille(double Time, double Spot, double stddev, double dt, size_t NombrePas)
 		: Time(Time), TimeNumber(floor((Time - 0) / dt) + 1), dt(dt), Spot(Spot)
 	{
 
@@ -30,7 +12,7 @@ namespace dauphine
 		StockMax = (log(Spot) + 5 * stddev*sqrt(Time));
 		double StockMin= (log(Spot) - 5 * stddev*sqrt(Time));
 
-		//On règle le problème des valeurs impaires, c'est très mal fait; a changer.
+		//On regle le probleme des valeurs impaires, c'est tres mal fait; a changer.
 		if (NombrePas % 2 == 0) {
 			StockNumber = NombrePas;
 		}

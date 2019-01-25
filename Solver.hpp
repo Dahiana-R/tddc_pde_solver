@@ -16,7 +16,7 @@ namespace dauphine
 
 	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients);
 
-	//calcul des boundaries, à voir plus tard comment on fait avec la classe boundaries... En ébauche. Ou peut être le faire dans le mesh?
+	//calcul des boundaries, à voir plus tard comment on fait avec la classe boundaries... En ebauche. Ou peut être le faire dans le mesh?
 	std::vector<double> upperboundary(std::vector<double>);
 	std::vector<double> lowerboundary(std::vector<double>);
 
