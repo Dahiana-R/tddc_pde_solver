@@ -11,7 +11,8 @@
 
 
 		/*
-		//COEF POUR NEUMAN
+		// Ebauche des coefficients pour Neumann
+
 	double ATheta(Grille mesh, Parameters param, bool isright) {
 			if (isright == false) {
 				return (1. + param.GetTheta()*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2) + param.GetRate() - 0.5 * (pow(param.GetVol(), 2) - param.GetRate()))) ;
@@ -39,7 +40,7 @@
 			return ((param.GetTheta() - 1.)*mesh.getdt()*(-0.5*pow(param.GetVol(), 2) / pow(mesh.getdx()[0], 2)));
 		}
 	}
-	//FIN COEF NEUMAN;	
+	//FIN COEF NEUMANN;	
 		*/
 
 int main(int argc, char* argv[])

@@ -65,11 +65,11 @@ namespace dauphine
 		std::vector <double> bright = Mid_diag_coeff(mesh, param, true);
 		std::vector <double> cright = Upper_diag_coeff(mesh, param, true);
 
-		//vecteur contenant tous les coef, on les calcule une fois on est tranquille, penser à changer sur les autres fonctions si je ne l'ai pas fait.
+		//vecteur contenant tous les coef
 		std::vector<std::vector<double>>coefficients{ aleft,bleft,cleft,aright,bright,cright };
 
-		//on va stocker les prix au temps t-1 la dedans
-		//on récupère expiry, mettre la fonction correctement....
+		//on stocke les prix au temps t-1 
+		//on récupère expiry
 
 		std::vector<double>pricebackward = vectorpayoff(bound);
 		std::vector<double>d(pricebackward.size());
@@ -85,8 +85,7 @@ namespace dauphine
 		return pricebackward;
 
 	}
-	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilise la premiere methode)
-	//OK VALIDE
+	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilise la premiere methode, algorithme de Thomas)
 	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients) {
 		std::vector<double> vect_tridiag(d.size());
 		std::vector<double> a = coefficients[0];
