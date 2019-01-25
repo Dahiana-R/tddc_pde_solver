@@ -6,52 +6,52 @@
 namespace dauphine
 {
 	std::vector<double> Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		std::vector <double> test(mesh.GetTailleStock() - 1);
+		std::vector <double> vect_mid_coeff(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
 			double dx = mesh.getdx()[i];
 			double dt = mesh.getdt();
 			double vol = param.GetVol();
 			double rate = param.GetRate();
 			if (isright == false) {
-                test[i] = (1. + param.GetTheta()*dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + dauphine::Rates::getRate(dx, dt, rate)));
+                vect_mid_coeff[i] = (1. + param.GetTheta()*dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + dauphine::Rates::getRate(dx, dt, rate)));
 			}
 			else {
-                test[i] = (1. + (param.GetTheta() - 1.)*dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + dauphine::Rates::getRate(dx, dt, rate)));
+                vect_mid_coeff[i] = (1. + (param.GetTheta() - 1.)*dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + dauphine::Rates::getRate(dx, dt, rate)));
 			}
 		}
-		return test;
+		return vect_mid_coeff;
 	}
 	std::vector<double> Upper_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		std::vector <double> test(mesh.GetTailleStock() - 1);
-		for (size_t i = 0; i < test.size(); i++) {
+		std::vector <double> vect_up_coeff(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < vect_up_coeff.size(); i++) {
 			double dx = mesh.getdx()[i];
 			double dt = mesh.getdt();
 			double vol = param.GetVol();
 			double rate = param.GetRate();
 			if (isright == false) {
-                test[i] = 0.5*param.GetTheta() * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_up_coeff[i] = 0.5*param.GetTheta() * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 			else {
-                test[i] = 0.5*(param.GetTheta()-1) * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_up_coeff[i] = 0.5*(param.GetTheta()-1) * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 		}
-		return test;
+		return vect_up_coeff;
 	}
 	std::vector<double> Lower_diag_coeff(Grille mesh, Parameters param, bool isright) {
-		std::vector <double> test(mesh.GetTailleStock() - 1);
-		for (size_t i = 0; i < test.size(); i++) {
+		std::vector <double> vect_low_coeff(mesh.GetTailleStock() - 1);
+		for (size_t i = 0; i < vect_low_coeff.size(); i++) {
 			double dx = mesh.getdx()[i];
 			double dt = mesh.getdt();
 			double vol = param.GetVol();
 			double rate = param.GetRate();
 			if (isright == false) {
-                test[i] = -0.5*param.GetTheta() * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_low_coeff[i] = -0.5*param.GetTheta() * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 			else {
-                test[i] = -0.5*(param.GetTheta()-1) * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_low_coeff[i] = -0.5*(param.GetTheta()-1) * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 		}
-		return test;
+		return vect_low_coeff;
 	}
 
 	std::vector<double> CrankNicholson(Grille mesh, Parameters param, Boundaries bound, std::vector<double>& precedent) {
@@ -85,10 +85,10 @@ namespace dauphine
 		return pricebackward;
 
 	}
-	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilisé la première méthode)
+	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilise la premiere methode)
 	//OK VALIDE
 	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients) {
-		std::vector<double> test(d.size());
+		std::vector<double> vect_tridiag(d.size());
 		std::vector<double> a = coefficients[0];
 		std::vector<double> b = coefficients[1];
 		std::vector<double> c = coefficients[2];
@@ -107,42 +107,41 @@ namespace dauphine
 		}
 		for (int i = d.size() - 1; i >= 0; i--) {
 			if (i == d.size() - 1) {
-				test[i] = tempd[i];
+				vect_tridiag[i] = tempd[i];
 			}
 			else {
-				test[i] = tempd[i] - tempc[i] * test[i + 1];
+				vect_tridiag[i] = tempd[i] - tempc[i] * vect_tridiag[i + 1];
 			}
 		}
-		return test;
+		return vect_tridiag;
 	}
 
-	//la fonction tourne, le fait que ca renvoie ou non le bon resultat est sujet à debat	.
 	std::vector<double> rightvector(Grille mesh, Parameters param, std::vector<double> f_n1, Boundaries bound, std::vector<std::vector<double>> coefficients,size_t time) {
 
-		std::vector<double> test(f_n1.size());
+		std::vector<double> right_vect(f_n1.size());
 		std::vector<double> a = coefficients[3];
 		std::vector<double> aleft = coefficients[0];
 		std::vector<double> b = coefficients[4];
 		std::vector<double> c = coefficients[5];
 		std::vector<double> cleft = coefficients[2];
 		for (size_t i = 0; i < f_n1.size(); i++) {
-			if (i == 0) { //le - devant le coef correspond au temps t(quand on passe le vecteur à droite), le reste au temps t+1
-				test[i] = -aleft[i] * bound.getlowercondition()[time+1] + a[i]* bound.getlowercondition()[time] + b[i] * f_n1[i] + c[i] * f_n1[i + 1]  ;
+			if (i == 0) { //le - devant le coef correspond au temps t(quand on passe le vecteur a droite), le reste au temps t+1
+				right_vect[i] = -aleft[i] * bound.getlowercondition()[time+1] + a[i]* bound.getlowercondition()[time] + b[i] * f_n1[i] + c[i] * f_n1[i + 1]  ;
 			}
 			else if (i == f_n1.size()-1) {
-				test[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * bound.getupercondition()[time] - cleft[i] * bound.getupercondition()[time+1];
+				right_vect[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * bound.getuppercondition()[time] - cleft[i] * bound.getuppercondition()[time+1];
 			}
 			else {
-				test[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * f_n1[i + 1];
+				right_vect[i] = a[i] * f_n1[i - 1] + b[i] * f_n1[i] + c[i] * f_n1[i + 1];
 			}
 			
 		}
-		return test;
+		return right_vect;
 
 	}
 
 	//OK VALIDE
-	//calcul du vecteur expiry, on prend celui de boundaries, on enlève juste les conditions initiales.
+	//calcul du vecteur expiry, on prend celui de boundaries, on enleve juste les conditions initiales.
 	std::vector<double> vectorpayoff(Boundaries bound) {
 		std::vector<double> stockprice = bound.getpayoff();
 		stockprice.pop_back();
@@ -156,9 +155,9 @@ namespace dauphine
         std::vector<double> payoff = bound.getpayoff();
         std::vector<double> stock = mesh.getStockVector();
         double spot = mesh.getSpot();
-        price.push_back(bound.getupercondition()[mesh.getTimeNumber() - 1]);
+        price.push_back(bound.getuppercondition()[mesh.getTimeNumber() - 1]);
         price.insert(price.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 1]);
-        avantdernier.push_back(bound.getupercondition()[mesh.getTimeNumber() - 2]);
+        avantdernier.push_back(bound.getuppercondition()[mesh.getTimeNumber() - 2]);
         avantdernier.insert(avantdernier.begin(), bound.getlowercondition()[mesh.getTimeNumber() - 2]);
         
         std::vector<double> solved(4);
