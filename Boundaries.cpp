@@ -10,6 +10,7 @@ namespace dauphine
 		double rate = param.GetRate();
 		double dX = mesh.GetTailleStock() - 1;
 		Payoff = mesh.getStockVector();
+		double spotSize = mesh.getdx().size();
 		std::vector<double> upper_vect(mesh.getTimeNumber());
 		std::vector<double> lower_vect(mesh.getTimeNumber());
 		for (size_t i = 0; i < mesh.GetTailleStock(); i++) {
@@ -17,7 +18,7 @@ namespace dauphine
 		}
 		
 		for (int i = 0; i< mesh.getTimeNumber(); i++) {
-			upper_vect[i] = Payoff[dX] * exp(-i * dt* rate);
+			upper_vect[i] = Payoff[dX] * exp(-i * dt*dauphine::Rates::getRate(mesh.getdx()[spotSize - 1], dt, rate));
 			lower_vect[i] = Payoff[0] * exp(- i * dt*dauphine::Rates::getRate(mesh.getdx()[0], dt, rate));
 		}
 		UpperCondition = upper_vect;
