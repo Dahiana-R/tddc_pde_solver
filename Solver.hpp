@@ -11,6 +11,8 @@
 
 namespace dauphine
 {// on solve, (faire une classe solveur?utile?)
+    // => oui pour éviter d'exposer la logique interne du solver
+
 	//Fonction principal
 	std::vector<double> CrankNicholson(Grille mesh, Parameters param, Boundaries bound, std::vector<double>& precedent);
 
@@ -32,6 +34,7 @@ namespace dauphine
     //application du solver
     std::vector<double> solving(Parameters param, Grille mesh, Boundaries bound);
 
+    // lovely name ;)
 	std::vector<double> tridiagonalisateur(Parameters param, Grille mesh, Neumann Neu);
 
 }

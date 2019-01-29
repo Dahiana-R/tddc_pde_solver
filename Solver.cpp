@@ -5,6 +5,8 @@
 
 namespace dauphine
 {
+    // It would be better to accept the value of theta instead of a isright boolean
+    // This would be more meaningfull and would avoid condition in the loop
 	std::vector<double> Mid_diag_coeff(Grille mesh, Parameters param, bool isright) {
 		std::vector <double> vect_mid_coeff(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < mesh.GetTailleStock() - 1; i++) {
@@ -21,6 +23,8 @@ namespace dauphine
 		}
 		return vect_mid_coeff;
 	}
+    // It would be better to accept the value of theta instead of a isright boolean
+    // This would be more meaningfull and would avoid condition in the loop
 	std::vector<double> Upper_diag_coeff(Grille mesh, Parameters param, bool isright) {
 		std::vector <double> vect_up_coeff(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < vect_up_coeff.size(); i++) {
@@ -29,14 +33,17 @@ namespace dauphine
 			double vol = param.GetVol();
 			double rate = param.GetRate();
 			if (isright == false) {
-                vect_up_coeff[i] = 0.5*param.GetTheta() * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                // this is due to a typo in the subject and won't be considered as a mistake
+                vect_up_coeff[i] = param.GetTheta() * dt*(0.5*(-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((0.5*pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 			else {
-                vect_up_coeff[i] = 0.5*(param.GetTheta()-1) * dt*((-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_up_coeff[i] = (param.GetTheta()-1) * dt*(0.5*(-pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((0.5*pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 		}
 		return vect_up_coeff;
 	}
+    // It would be better to accept the value of theta instead of a isright boolean
+    // This would be more meaningfull and would avoid condition in the loop
 	std::vector<double> Lower_diag_coeff(Grille mesh, Parameters param, bool isright) {
 		std::vector <double> vect_low_coeff(mesh.GetTailleStock() - 1);
 		for (size_t i = 0; i < vect_low_coeff.size(); i++) {
@@ -45,10 +52,11 @@ namespace dauphine
 			double vol = param.GetVol();
 			double rate = param.GetRate();
 			if (isright == false) {
-                vect_low_coeff[i] = -0.5*param.GetTheta() * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                // this is due to a typo in the subject and won't be considered as a mistake
+                vect_low_coeff[i] = -param.GetTheta() * dt*(0.5*(pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((0.5 * pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 			else {
-                vect_low_coeff[i] = -0.5*(param.GetTheta()-1) * dt*((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
+                vect_low_coeff[i] = -(param.GetTheta()-1) * dt*(0.5*(pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) / pow(dx, 2)) + ((0.5*pow(dauphine::Volatility::getVolatility(dx, dt, vol), 2) - dauphine::Rates::getRate(dx, dt, rate)) / (2.0*dx)));
 			}
 		}
 		return vect_low_coeff;
@@ -86,8 +94,11 @@ namespace dauphine
 
 	}
 	//CF Wikipedia (tridiagonal matrix algorithm, j'ai utilise la premiere methode, algorithme de Thomas)
+    // Paraeters should be taken by const ref
 	std::vector<double> LinearTriDiagSolver(std::vector<double> d, std::vector<std::vector<double>> coefficients) {
 		std::vector<double> vect_tridiag(d.size());
+        // Since you won't modify a, b, or c, take const references on coefficient[i]
+        // to avoid copies
 		std::vector<double> a = coefficients[0];
 		std::vector<double> b = coefficients[1];
 		std::vector<double> c = coefficients[2];
@@ -115,9 +126,11 @@ namespace dauphine
 		return vect_tridiag;
 	}
 
+    // Parameters should be passed by const ref
 	std::vector<double> rightvector(Grille mesh, Parameters param, std::vector<double> f_n1, Boundaries bound, std::vector<std::vector<double>> coefficients,size_t time) {
 
 		std::vector<double> right_vect(f_n1.size());
+        // Take const reference on coefficients to avoid copies
 		std::vector<double> a = coefficients[3];
 		std::vector<double> aleft = coefficients[0];
 		std::vector<double> b = coefficients[4];
@@ -148,9 +161,11 @@ namespace dauphine
 		return stockprice;
 	}
     
+    // WHy not taking parameters as const references to avoid copies?
     std::vector<double> solving(Parameters param, Grille mesh, Boundaries bound){
         std::vector<double> avantdernier(mesh.getTimeNumber());
         std::vector<double> price = dauphine::CrankNicholson(mesh, param, bound, avantdernier);
+        // Unused
         std::vector<double> payoff = bound.getpayoff();
         std::vector<double> stock = mesh.getStockVector();
         double spot = mesh.getSpot();

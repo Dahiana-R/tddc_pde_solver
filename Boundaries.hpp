@@ -9,6 +9,11 @@
 
 namespace dauphine
 {// definir les boundaries faire une sous classe pour condition de Neuman/Dirichlet
+    // Boundaries should be a interface (with pure virtual methods), inherited by
+    // Dirichlet and Neumann conditions, would be more meaninful.
+    // Missing entity semantic
+    // - virtual destructor (here you have a potential leak with Boundaries* b = new Neumann(...)
+    // - deleted copy and move constructors / assign operators to prevent incomplete copies
 	class Boundaries {
 	public:
 		Boundaries(void);
