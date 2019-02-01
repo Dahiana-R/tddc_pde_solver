@@ -123,7 +123,8 @@ int main(int argc, char* argv[])
 
     std::cout << "Theta, between 0 and 1:" << std::endl;
     
-    while (!(std::cin >> theta) or theta< 0 or theta > 1) {
+    // or does not compile on MSVC 2015 (this is a bug of the compiler)
+    while (!(std::cin >> theta) || theta< 0 || theta > 1) {
             std::cin.clear();
             std::cin.ignore(512, '\n');
             std::cout<< "You have entered a wrong input. Theta: "<<std::endl;
@@ -183,13 +184,20 @@ int main(int argc, char* argv[])
     if (product == 'A'){
         dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::call);
         solution = dauphine::solving(param,  mesh,  bound);
-        solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, true));
+        // bs_price operates on forward and must be discounted; this is actually
+        // the black formula, not black and scholes, and the name is confusing.
+        // Thus this won't be considered as a mistake.
+        // solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, true));
+        double df = std::exp(-rate * maturity);
+        solution.push_back(dauphine::bs_price(spot / df, strike, volatility, maturity, true) * df);
     }
     
     else if(product == 'B'){
         dauphine::Boundaries bound(mesh, param, strike, dauphine::Payoffs::put);
         solution = dauphine::solving(param,  mesh,  bound);
-        solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, false));
+        //solution.push_back(dauphine::bs_price(spot, strike, volatility, maturity, false));
+        double df = std::exp(-rate * maturity);
+        solution.push_back(dauphine::bs_price(spot/ df, strike, volatility, maturity, false) * df);
     }
 
     if(solution[4]!= 0.000){

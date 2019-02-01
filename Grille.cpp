@@ -55,21 +55,33 @@ namespace dauphine
     double Grille::getSpot() const {
         return Spot;
     }
+    // Since the grid is uniform, no need to store N times
+    // the same value of dx, just store a double
 	std::vector<double> Grille::getdx() const{
 		return dx;
 	}
+    
+    // No need to store a StockNumber data member,
+    // simply return StockVector.size()
 	size_t Grille :: GetTailleStock() const{
 		return StockNumber;
 	}
+
+    // Same remark, could return TimeVector.size()
+    // (but this implies storing the TimeVector
+    // instead of building it upon each call)
 	size_t Grille::getTimeNumber() const {
 		return TimeNumber;
 	}
     
-
+    // SHould be returned by const ref
 	std::vector<double> Grille::getStockVector() const{
 
 		return StockVector;
 	}
+
+    // TimeVector should be stored as a data member,
+    // and this method should return it by const ref
 	std::vector<double> Grille::getTimeVector() const{
 		std::vector<double> dt_vect(TimeNumber);
 
